@@ -1,0 +1,28 @@
+{
+  "name": "lost-translation",
+  "version": "0.1.0",
+  "description": "App to test translation APIs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://JosephCoppola@github.com/JosephCoppola/Lost-In-Translation.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JosephCoppola/Lost-In-Translation/issues"
+  },
+  "homepage": "https://github.com/JosephCoppola/Lost-In-Translation#readme",
+  "dependencies": {
+    "bluebird": "^3.3.5",
+    "body-parser": "^1.15.1",
+    "compression": "^1.6.1",
+    "express": "^4.13.4",
+    "jade": "^1.11.0",
+    "mongoose": "^4.4.16"
+  }
+}
