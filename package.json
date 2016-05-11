@@ -19,12 +19,15 @@
   },
   "homepage": "https://github.com/JosephCoppola/Lost-In-Translation#readme",
   "dependencies": {
+    "babel-core": "^6.8.0",
+    "babel-loader": "^6.2.4",
     "bluebird": "^3.3.5",
     "body-parser": "^1.15.1",
     "compression": "^1.6.1",
     "express": "^4.13.4",
     "jade": "^1.11.0",
-    "mongoose": "^4.4.16"
+    "mongoose": "^4.4.16",
+    "webpack": "^1.13.0"
   },
   "devDependencies": {
     "babel-cli": "^6.8.0",
