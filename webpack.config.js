@@ -2,7 +2,7 @@ var path = require('path');
 
 module.exports = {
   entry: {
-    app: './client/app/app.js',
+    app: './client/uncompiledJS/app.js',
   },
 
   output: {
