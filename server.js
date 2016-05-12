@@ -18,4 +18,5 @@ server.get('/', (req, res) => {
 
 server.listen(1337);
 
+console.log('_________________________________________________________________________ \n');
 console.log('Server running at http://127.0.0.1:1337/');
