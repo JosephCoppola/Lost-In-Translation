@@ -1,13 +1,61 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>LostTranslation</title>
-  </head>
-  <body>
-
-    <h1>Header</h1>
-    <p>Info</p>
-
-    <script src = "/build/js/app.js"></script>
-  </body>
+<html lang="en_US">
+    <head>
+        <meta name="description" content="A tool to compared a corpus that has been re-translated between two languages multiple times" />
+        <meta name="keywords" content="language, translation, comparison, auto-translate" />
+        <meta name="author" content="Joe Coppola, Tyler Sargent" />
+        <meta name="robots" content="index, follow" />
+        <meta name="revisit-after" content="1 month" />
+        
+        <link rel="stylesheet" type="text/css" href="Media/Fonts/League-Gothic/stylesheet.css" />
+        <link rel="stylesheet" type="text/css" href="style.css" />
+    
+        <script src = "../build/js/app.js"></script>
+    
+        <title>Lost in Translation</title>
+    </head>
+    <body>
+    <div class="header">
+        <h1>Lost In Translation</h1>
+        <hr>
+        This tool compares a corpus of text that has been translated using one of many different</br>
+        automatic translation tools available online. It compares the degredation of text over  </br>
+        many different translations back and forth from a language.
+        <hr>
+    </div>
+    
+    </div class="content">
+        <div class="container">
+            <textarea class="text-input" name="u_text" maxlength="100" placeholder="Paste text here to translate..."></textarea>
+            </br>
+            From <select name="from_language">
+                <option value="english_us" selected>US English</option>
+                <option value="english_uk">UK English</option>
+                <option value="spanish">Spanish</option>
+                <option value="german">German</option>
+            </select>
+            to <select name="to_language">
+                <option value="english_us">US English</option>
+                <option value="english_uk">UK English</option>
+                <option value="spanish" selected>Spanish</option>
+                <option value="german">German</option>
+            </select>
+            </br>
+            using <select name="translate_engine">
+                <option value="google" selected>Google Translate</option>
+                <option value="promt">PROMT</option>
+            </select>
+            </br>
+            <input type="submit" value="Translate">
+        </div>
+        <hr>
+        </div class="container">
+            <textarea class="text-readout" name="t_text_1" maxlength="100" placeholder="Text after one translation..."></textarea>
+            <textarea class="text-readout" name="t_text_2" maxlength="100" placeholder="Text after many translations..."></textarea>
+        </div>
+    </div>
+    
+    </div class="footer">
+    </div>
+    </body>
 </html>

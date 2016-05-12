@@ -1,1 +1,3 @@
-console.log("Test");
+var app = {} || app;
+
+
