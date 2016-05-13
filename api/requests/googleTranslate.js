@@ -19,7 +19,7 @@ export function googleTranslate(translateObj, response) {
     console.log(res.text);
 
     response.writeHead(200, {'Content-Type': 'application/json'});
-    response.write(JSON.parse(res.text));
+    response.write(res.text);
     response.end();
   })
   .catch((err) => { console.log(err) });
