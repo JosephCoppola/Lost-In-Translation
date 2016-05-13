@@ -1,3 +1,5 @@
+import { googleTranslate } from './requests/googleTranslate';
+
 export function initRoutes (server, index) {
 
   server.get('/', (req, res) => {
@@ -7,6 +9,6 @@ export function initRoutes (server, index) {
   });
 
   server.post('/googleTranslate', (req, res) => {
-    console.log(req.body);
+    console.log(googleTranslate(req.body));
   });
 }
