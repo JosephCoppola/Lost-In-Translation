@@ -10,6 +10,7 @@ const server = express();
 
 //Load in HTML file
 const index = fs.readFileSync(__dirname + '/client/client.html');
+const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 // Serve Assets
 server.use('**/js', express.static(path.resolve(`${__dirname}/build/js`)));
@@ -20,7 +21,7 @@ server.use(bodyParser.urlencoded({ extended: true }));
 
 // Initialize server route and run
 initRoutes(server, index);
-server.listen(1337);
+server.listen(port);
 
 console.log('_________________________________________________________________________ \n');
 console.log('Server running at http://127.0.0.1:1337/');
