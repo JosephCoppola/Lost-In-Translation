@@ -6,7 +6,7 @@ export function initRoutes (server, index) {
     res.end();
   });
 
-  server.get('/googleTranslate', (req, res) => {
-    console.log('API TIME');
+  server.post('/googleTranslate', (req, res) => {
+    console.log(req.body);
   });
 }
