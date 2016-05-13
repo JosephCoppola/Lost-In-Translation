@@ -8,7 +8,7 @@ let apiDOM;
 function onSubmitClick() {
   let translateInfo = {};
 
-  tranlateInfo.test = 'you'
+  translateInfo.test = 'you';
 
   if(apiDOM.value === 'google') {
     googleTranslate(translateInfo)

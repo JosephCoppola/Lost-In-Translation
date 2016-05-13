@@ -10,4 +10,3 @@ export const googleTranslate = (translateInfo) =>
         if (err || !res.ok) reject(console.log('Failed to tranlate text with Google Translate'));
         else resolve(res);
       }));
-  );
