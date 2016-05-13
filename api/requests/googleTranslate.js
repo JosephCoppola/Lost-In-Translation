@@ -6,7 +6,8 @@ const APIKEY = 'AIzaSyA1y8lTuaRw299bXOmS05bbR651RNinPKA';
 function googleTranslatePOST(translateInfo) {
   return new Promise((resolve, reject) =>
     request
-      .get('https://www.googleapis.com/language/translate/v2?key=AIzaSyA1y8lTuaRw299bXOmS05bbR651RNinPKA&q=hello%20world&source=en&target=de')
+      .get('https://www.googleapis.com/language/translate/v2?key='
+      + APIKEY + '&q=' + encodeURI(translateInfo.text) + '&source=' + translateInfo.sourceLang + '&target=' + translateInfo.targetLang)
       .end((err, res) => {
         if (err || !res.ok) reject(console.log('Failed to tranlate text with Google Translate - Server'));
         else resolve(res);
