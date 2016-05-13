@@ -9,6 +9,6 @@ export function initRoutes (server, index) {
   });
 
   server.post('/googleTranslate', (req, res) => {
-    console.log(googleTranslate(req.body));
+    googleTranslate(req.body, res);
   });
 }

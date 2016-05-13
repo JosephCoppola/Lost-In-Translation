@@ -7,13 +7,14 @@ let apiDOM;
 
 function onSubmitClick() {
   let translateInfo = {};
-  
+
   translateInfo.text = textToTranslateDOM.value;
   translateInfo.targetLang = toLanguageDOM.value;
   translateInfo.sourceLang = fromLanguageDOM.value;
 
   if(apiDOM.value === 'google') {
     googleTranslate(translateInfo)
+    .then((translatedResponse) => console.log(translatedResponse))
     .catch((err) => { alert(err); });
   }
 }

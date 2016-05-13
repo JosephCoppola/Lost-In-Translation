@@ -13,6 +13,14 @@ function googleTranslatePOST(translateInfo) {
       }));
 }
 
-export function googleTranslate(translateObj) {
-  googleTranslatePOST(translateObj).then((res) => { console.log('Translate Complete') }).catch((err) => { console.log(err) });
+export function googleTranslate(translateObj, response) {
+  googleTranslatePOST(translateObj)
+  .then((res) => {
+    console.log(res.text);
+
+    response.writeHead(200, {'Content-Type': 'application/json'});
+    response.write(JSON.parse(res.text));
+    response.end();
+  })
+  .catch((err) => { console.log(err) });
 }
