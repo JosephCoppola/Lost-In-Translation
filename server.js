@@ -24,4 +24,4 @@ initRoutes(server, index);
 server.listen(port);
 
 console.log('_________________________________________________________________________ \n');
-console.log('Server running at http://127.0.0.1:1337/');
+console.log('Server running at http://127.0.0.1:3000/');
