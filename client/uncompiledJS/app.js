@@ -52,7 +52,7 @@ function resolveTranslation(resObj) {
 
   resObj = JSON.parse(resObj.text);
 
-  if (translationsLeft === (startingTranslations - 1)) {
+  if (translationsLeft === (startingTranslations - 2)) {
       textAfterOneDOM.value = resObj.data.translations[0].translatedText;
   }
   else if( translationsLeft === 0) {
@@ -108,7 +108,7 @@ function initPage() {
 
   document.querySelector('#submit').onclick = onSubmitClick;
 
-  MAX_TRANSLATIONS = 4;
+  MAX_TRANSLATIONS = 6;
 
   translationsLeft = 0;
   currentlyTranslating = false;
