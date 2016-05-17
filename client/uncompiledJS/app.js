@@ -1,6 +1,7 @@
 //Import helper function from requests folder
 import { googleTranslate } from './requests/googleTranslate'
 import Promise from 'bluebird';
+import diff_match_patch from 'diff-match-patch';
 
 // Cached DOM elements that provide values and can be used to set vaules
 let textToTranslateDOM;
@@ -10,11 +11,14 @@ let fromLanguageDOM;
 let toLanguageDOM;
 let apiDOM;
 
+let diffMatchPatch;
+
 let MAX_TRANSLATIONS;
 let startingTranslations;
 
 let translationsLeft;
 let currentlyTranslating;
+let calculatingDiff;
 let fromSourceToTarget;
 
 let currentTranslateInfo;
@@ -58,7 +62,10 @@ function resolveTranslation(resObj) {
   else if( translationsLeft === 0) {
     textAfterManyDOM.value = resObj.data.translations[0].translatedText;
     currentlyTranslating = false;
+    calculatingDiff = true;
     fromSourceToTarget = false;
+    
+    calculateDiff();
   }
 
   if(fromSourceToTarget) {
@@ -97,6 +104,12 @@ function translateLoop() {
                .then((res) => console.log("Done"));
 }
 
+function calculateDiff(text1, text2){
+    // Returns an array of differences between the two texts
+    var diffArray = diffMatchPatch.diff_main(textToTranslateDOM.value, textAfterManyDOM.value);
+    console.log(diffArray);
+}
+
 // Called on window load to initialize needed code
 function initPage() {
   textToTranslateDOM = document.querySelector('#textToTranslate');
@@ -109,10 +122,14 @@ function initPage() {
   document.querySelector('#submit').onclick = onSubmitClick;
 
   MAX_TRANSLATIONS = 6;
-
   translationsLeft = 0;
+  
   currentlyTranslating = false;
+  calculatingDiff = false;
   fromSourceToTarget = false;
+  
+  diffMatchPatch = new diff_match_patch();
+  
   currentTranslateInfo = {};
 }
 
