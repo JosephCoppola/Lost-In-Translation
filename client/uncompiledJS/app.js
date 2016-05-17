@@ -1,5 +1,6 @@
 //Import helper function from requests folder
 import { googleTranslate } from './requests/googleTranslate'
+import Promise from 'bluebird';
 
 // Cached DOM elements that provide values and can be used to set vaules
 let textToTranslateDOM;
@@ -10,12 +11,14 @@ let toLanguageDOM;
 let apiDOM;
 
 let MAX_TRANSLATIONS;
+let startingTranslations;
 
 let translationsLeft;
 let currentlyTranslating;
 let fromSourceToTarget;
 
 let currentTranslateInfo;
+let sourceTranslateInfo;
 
 // Event listner for when the translate button is pressed.
 // Grabs all the values needed to hit the translation API and
@@ -23,90 +26,75 @@ let currentTranslateInfo;
 // imported helper funcion
 function onSubmitClick() {
   if(!currentlyTranslating){
-    currentTranslateInfo = {};
+    sourceTranslateInfo = {};
     textAfterOneDOM.value = "";
     textAfterManyDOM.value = "";
 
-    currentTranslateInfo.text = textToTranslateDOM.value;
-    currentTranslateInfo.targetLang = toLanguageDOM.value;
-    currentTranslateInfo.sourceLang = fromLanguageDOM.value;
+    sourceTranslateInfo.text = textToTranslateDOM.value;
+    sourceTranslateInfo.targetLang = toLanguageDOM.value;
+    sourceTranslateInfo.sourceLang = fromLanguageDOM.value;
+
+    currentTranslateInfo = sourceTranslateInfo;
 
     if(apiDOM.value === 'google') {
+      startingTranslations = MAX_TRANSLATIONS;
       translationsLeft = MAX_TRANSLATIONS;
       currentlyTranslating = true;
       fromSourceToTarget = true;
-      translate(currentTranslateInfo);
+      translateLoop();
     }
   }
 }
 
-function translate(translateInfo) {
-  // Call helper function, also a promise, once complete (.then()), take translatedResponse
-  // and do what we want with it. For the time being it populates the 'translatedOnce' input field
-  googleTranslate(translateInfo)
-  .then((translatedResponse) => {
+function resolveTranslation(resObj) {
 
-    const resObj = JSON.parse(translatedResponse.text);
-    console.log(resObj);
+  currentTranslateInfo = {};
 
-    if(translationsLeft === MAX_TRANSLATIONS && fromSourceToTarget){
+  resObj = JSON.parse(resObj.text);
 
-      console.log("Translations left: " + translationsLeft + " Translating from source to target: " + fromSourceToTarget);
-
-      // Resend the translated text to be translated back to the original language
-      fromSourceToTarget = false;
-      let translateInfo = {};
-      translateInfo.text = resObj.data.translations[0].translatedText;
-      translateInfo.targetLang = currentTranslateInfo.sourceLang;
-      translateInfo.sourceLang = currentTranslateInfo.targetLang;
-      translate(translateInfo);
-    }if(translationsLeft === MAX_TRANSLATIONS && !fromSourceToTarget){
+  if (translationsLeft === (startingTranslations - 1)) {
       textAfterOneDOM.value = resObj.data.translations[0].translatedText;
+  }
+  else if( translationsLeft === 0) {
+    textAfterManyDOM.value = resObj.data.translations[0].translatedText;
+    currentlyTranslating = false;
+    fromSourceToTarget = false;
+  }
 
-      console.log("Translations left: " + translationsLeft + " Translating from source to target: " + fromSourceToTarget);
+  if(fromSourceToTarget) {
+    fromSourceToTarget = false;
 
-      translationsLeft -= 1;
+    currentTranslateInfo.text = resObj.data.translations[0].translatedText;
+    currentTranslateInfo.targetLang = sourceTranslateInfo.sourceLang;
+    currentTranslateInfo.sourceLang = sourceTranslateInfo.targetLang;
+  }
+  else {
+    fromSourceToTarget = true;
 
-      // Resend the translated text to be translated back to the original language
-      fromSourceToTarget = false;
-      let translateInfo = {};
-      translateInfo.text = resObj.data.translations[0].translatedText;
-      translateInfo.targetLang = currentTranslateInfo.sourceLang;
-      translateInfo.sourceLang = currentTranslateInfo.targetLang;
-      translate(translateInfo);
-    } else if (translationsLeft > 0 && !fromSourceToTarget) {
+    currentTranslateInfo.text = resObj.data.translations[0].translatedText;
+    currentTranslateInfo.targetLang = sourceTranslateInfo.targetLang;
+    currentTranslateInfo.sourceLang = sourceTranslateInfo.sourceLang;
+  }
 
-      fromSourceToTarget = true;
+  console.log(currentTranslateInfo);
+}
 
-      console.log("Translations left: " + translationsLeft + " Translating from source to target: " + fromSourceToTarget);
+let promiseFor = Promise.method(function(condition, action, value) {
+    if (!condition(value)) return value;
+    return action(value).then(promiseFor.bind(null, condition, action));
+});
 
-      let translateInfo = {};
-      translateInfo.text = resObj.data.translations[0].translatedText;
-      translateInfo.targetLang = currentTranslateInfo.targetLang;
-      translateInfo.sourceLang = currentTranslateInfo.sourceLang;
-      translate(translateInfo);
-    } else if(translationsLeft > 0 && fromSourceToTarget){
-
-      translationsLeft -= 1;
-
-      fromSourceToTarget = false;
-
-      console.log("Translations left: " + translationsLeft + " Translating from source to target: " + fromSourceToTarget);
-
-      let translateInfo = {};
-      translateInfo.text = resObj.data.translations[0].translatedText;
-      translateInfo.targetLang = currentTranslateInfo.sourceLang;
-      translateInfo.sourceLang = currentTranslateInfo.targetLang;
-      translate(translateInfo);
-    }else if(translationsLeft === 0){
-
-      textAfterManyDOM.value = resObj.data.translations[0].translatedText;
-      currentlyTranslating = false;
-      fromSourceToTarget = false;
-      translationsLeft = 0;
-    }
-  })
-  .catch((err) => { alert(err); });
+function translateLoop() {
+    promiseFor(() => { return translationsLeft > 0; },
+               () => {
+                 return googleTranslate(currentTranslateInfo)
+                        .then((res) => {
+                          translationsLeft--;
+                          resolveTranslation(res);
+                          return;
+                        });
+               }, translationsLeft)
+               .then((res) => console.log("Done"));
 }
 
 // Called on window load to initialize needed code
@@ -120,11 +108,12 @@ function initPage() {
 
   document.querySelector('#submit').onclick = onSubmitClick;
 
-  MAX_TRANSLATIONS = 3;
+  MAX_TRANSLATIONS = 4;
 
   translationsLeft = 0;
   currentlyTranslating = false;
   fromSourceToTarget = false;
+  currentTranslateInfo = {};
 }
 
 window.addEventListener('load', initPage);
