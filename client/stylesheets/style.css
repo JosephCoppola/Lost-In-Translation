@@ -24,15 +24,35 @@ input, select {
 
 .text-input {
     height: 300px;
-    width: 450px;
+    width: 500px;
     font-family: "Times New Roman", Times, Sans;
     font-size: 16px;
 }
 
-.text-readout {
-    height: 300px;
-    width: 450px;
+.text-readout-original {
+    display: inline-block;
+    width: 500px;
     margin: 10px;
+    padding: 10px;
     font-family: "Times New Roman", Times, Sans;
     font-size: 16px;
+    background-color: rgba(255, 0, 0, 0.3);
+}
+
+.text-readout-original .diff {
+    background-color: rgba(255, 0, 0, 0.5);
+}
+
+.text-readout-translated {
+    display: inline-block;
+    width: 500px;
+    margin: 10px;
+    padding: 10px;
+    font-family: "Times New Roman", Times, Sans;
+    font-size: 16px;
+    background-color: rgba(0, 255, 0, 0.3);
+}
+
+.text-readout-translated .diff {
+    background-color: rgba(0, 255, 0, 0.5);
 }

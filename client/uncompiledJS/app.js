@@ -6,8 +6,8 @@ import diff_match_patch from 'diff-match-patch';
 
 // Cached DOM elements that provide values and can be used to set vaules
 let textToTranslateDOM;
-let textAfterOneDOM;
-let textAfterManyDOM;
+let textBeforeDOM;
+let textAfterDOM;
 let fromLanguageDOM;
 let toLanguageDOM;
 let apiDOM;
@@ -32,8 +32,8 @@ let sourceTranslateInfo;
 function onSubmitClick() {
   if(!currentlyTranslating){
     sourceTranslateInfo = {};
-    textAfterOneDOM.value = "";
-    textAfterManyDOM.value = "";
+    textBeforeDOM.value = "";
+    textAfterDOM.value = "";
 
     sourceTranslateInfo.text = textToTranslateDOM.value;
     sourceTranslateInfo.targetLang = toLanguageDOM.value;
@@ -64,11 +64,9 @@ function resolveTranslation(resObj) {
 
   resObj = JSON.parse(resObj.text);
 
-  if (translationsLeft === (startingTranslations - 2)) {
-      textAfterOneDOM.value = resObj.text;
-  }
-  else if( translationsLeft === 0) {
-    textAfterManyDOM.value = resObj.text;
+  if( translationsLeft === 0) {
+    textBeforeDOM.innerHTML = textToTranslateDOM.value;
+    textAfterDOM.innerHTML = resObj.text;
     currentlyTranslating = false;
     calculatingDiff = true;
     fromSourceToTarget = false;
@@ -90,8 +88,6 @@ function resolveTranslation(resObj) {
     currentTranslateInfo.targetLang = sourceTranslateInfo.targetLang;
     currentTranslateInfo.sourceLang = sourceTranslateInfo.sourceLang;
   }
-
-  console.log(currentTranslateInfo);
 }
 
 let promiseFor = Promise.method(function(condition, action, value) {
@@ -114,15 +110,35 @@ function translateLoop(translateCall) {
 
 function calculateDiff(text1, text2){
     // Returns an array of differences between the two texts
-    var diffArray = diffMatchPatch.diff_main(textToTranslateDOM.value, textAfterManyDOM.value);
+    var diffArray = diffMatchPatch.diff_main(textBeforeDOM.innerHTML, textAfterDOM.innerHTML);
+    diffMatchPatch.diff_cleanupSemantic(diffArray);
+    
+    // Split the diff into two different texts
+    var textBeforeDiff = "";
+    var textAfterDiff = "";
+    
+    diffArray.forEach(function(item, index){
+        if(item[0] == -1){
+            textBeforeDiff += "<span class=\"diff\">" + item[1] + "</span>";
+        } else if(item[0] === 0){
+            textBeforeDiff += item[1];
+            textAfterDiff += item[1];
+        }else if(item[0] === 1){
+            textAfterDiff += "<span class=\"diff\">" + item[1] + "</span>";
+        }
+    });
+    
+    textBeforeDOM.innerHTML = textBeforeDiff;
+    textAfterDOM.innerHTML = textAfterDiff;
+    
     console.log(diffArray);
 }
 
 // Called on window load to initialize needed code
 function initPage() {
   textToTranslateDOM = document.querySelector('#textToTranslate');
-  textAfterOneDOM = document.querySelector('#oneTranslation');
-  textAfterManyDOM = document.querySelector('#manyTranslation');
+  textBeforeDOM = document.querySelector('#beforeTranslation');
+  textAfterDOM = document.querySelector('#afterTranslation');
   fromLanguageDOM =  document.querySelector('#from');
   toLanguageDOM = document.querySelector('#to');
   apiDOM = document.querySelector('#api');
