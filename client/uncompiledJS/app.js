@@ -118,13 +118,21 @@ function calculateDiff(text1, text2){
     var textAfterDiff = "";
     
     diffArray.forEach(function(item, index){
-        if(item[0] == -1){
-            textBeforeDiff += "<span class=\"diff\">" + item[1] + "</span>";
+        if(item[0] === -1){
+            if(item[1] === '\n'){
+                textBeforeDiff += " ";
+            } else {
+                textBeforeDiff += "<span class=\"diff\">" + item[1] + "</span>";
+            }
         } else if(item[0] === 0){
             textBeforeDiff += item[1];
             textAfterDiff += item[1];
         }else if(item[0] === 1){
-            textAfterDiff += "<span class=\"diff\">" + item[1] + "</span>";
+            if(item[1] === ' '){
+                textAfterDiff += " ";
+            } else {
+                textAfterDiff += "<span class=\"diff\">" + item[1] + "</span>";
+            }
         }
     });
     
