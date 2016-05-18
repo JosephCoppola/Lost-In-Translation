@@ -3,7 +3,7 @@
 Demo hosted [here]. (Will be slow to open on first visit, server is starting up. This is normal)
 
 ###Contributors
-Tyler Sergent: Frontend Developer
+Tyler Sargent: Frontend Developer
 
 Joe Coppola: Backend Developer
 
