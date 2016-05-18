@@ -17,10 +17,12 @@ function googleTranslatePOST(translateInfo) {
 export function googleTranslate(translateObj, response) {
   googleTranslatePOST(translateObj)
   .then((res) => {
-    console.log(res.text);
+
+    const responseText = JSON.parse(res.text);
+    console.log(responseText.data.translations);
 
     response.writeHead(200, {'Content-Type': 'application/json'});
-    response.write(res.text);
+    response.write(JSON.stringify({text: responseText.data.translations[0].translatedText}));
     response.end();
   })
   .catch((err) => { console.log(err) });

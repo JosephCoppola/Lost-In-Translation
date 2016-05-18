@@ -1,5 +1,6 @@
 //Import helper function from requests folder
 import { googleTranslate } from './requests/googleTranslate'
+import { yandexTranslate } from './requests/yandexTranslate'
 import Promise from 'bluebird';
 import diff_match_patch from 'diff-match-patch';
 
@@ -45,7 +46,14 @@ function onSubmitClick() {
       translationsLeft = MAX_TRANSLATIONS;
       currentlyTranslating = true;
       fromSourceToTarget = true;
-      translateLoop();
+      translateLoop(googleTranslate);
+    }
+    else if(apiDOM.value === 'yandex') {
+      startingTranslations = MAX_TRANSLATIONS;
+      translationsLeft = MAX_TRANSLATIONS;
+      currentlyTranslating = true;
+      fromSourceToTarget = true;
+      translateLoop(yandexTranslate);
     }
   }
 }
@@ -57,10 +65,10 @@ function resolveTranslation(resObj) {
   resObj = JSON.parse(resObj.text);
 
   if (translationsLeft === (startingTranslations - 2)) {
-      textAfterOneDOM.value = resObj.data.translations[0].translatedText;
+      textAfterOneDOM.value = resObj.text;
   }
   else if( translationsLeft === 0) {
-    textAfterManyDOM.value = resObj.data.translations[0].translatedText;
+    textAfterManyDOM.value = resObj.text;
     currentlyTranslating = false;
     calculatingDiff = true;
     fromSourceToTarget = false;
@@ -71,14 +79,14 @@ function resolveTranslation(resObj) {
   if(fromSourceToTarget) {
     fromSourceToTarget = false;
 
-    currentTranslateInfo.text = resObj.data.translations[0].translatedText;
+    currentTranslateInfo.text = resObj.text;
     currentTranslateInfo.targetLang = sourceTranslateInfo.sourceLang;
     currentTranslateInfo.sourceLang = sourceTranslateInfo.targetLang;
   }
   else {
     fromSourceToTarget = true;
 
-    currentTranslateInfo.text = resObj.data.translations[0].translatedText;
+    currentTranslateInfo.text = resObj.text;
     currentTranslateInfo.targetLang = sourceTranslateInfo.targetLang;
     currentTranslateInfo.sourceLang = sourceTranslateInfo.sourceLang;
   }
@@ -91,10 +99,10 @@ let promiseFor = Promise.method(function(condition, action, value) {
     return action(value).then(promiseFor.bind(null, condition, action));
 });
 
-function translateLoop() {
+function translateLoop(translateCall) {
     promiseFor(() => { return translationsLeft > 0; },
                () => {
-                 return googleTranslate(currentTranslateInfo)
+                 return translateCall(currentTranslateInfo)
                         .then((res) => {
                           translationsLeft--;
                           resolveTranslation(res);
