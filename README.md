@@ -16,7 +16,7 @@ In ENGL 216, we discussed translations of literature and the implications of rea
 We were able to find two translate APIs with easy and quick to use response data in the form of JSON. Currently we support all Google Translate languages, some of which Yandex does not support.
 
 * Google Translate API
-* Yandex
+* Yandex Translate API
 
 [here]:http://lost-in-translation.herokuapp.com/
 [Translation Party]:http://translationparty.com/
