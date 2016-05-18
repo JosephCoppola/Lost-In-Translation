@@ -18,5 +18,26 @@ We were able to find two translate APIs with easy and quick to use response data
 * Google Translate API
 * Yandex Translate API
 
+###Node Modules
+
+* babel-core
+* babel-cli
+* babel-loader
+* babel-preset-es2015
+* babel-preset-stage-2
+* bluebird
+* body-parser
+* compression
+* diff-mation-patch
+* express
+* nodemon
+* superagent
+* webpack
+* yandex-translate-api
+
+
+###Build Process
+The client code consists of ES6 javascript that is converted to ES5 using Webpack and babel. The server is also written in ES6 that is converted to ES5 by babel. Communication between the client and server is mainly handled by express, with routes defined in `api/routes.js`. `Superagent` is used to simplify AJAX calls while promises are used from `bluebird` to help ensure asyn operations are called at the right times with the right response data. 
+
 [here]:http://lost-in-translation.herokuapp.com/
 [Translation Party]:http://translationparty.com/
