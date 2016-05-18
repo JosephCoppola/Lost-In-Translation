@@ -15,10 +15,18 @@ function yandexTranslatePOST(translateInfo) {
 export function yandexTranslate(translateObj, response) {
   yandexTranslatePOST(translateObj)
   .then((res) => {
-    console.log(res.text[0]);
+    console.log(res);
+    let responseText = '';
+
+    if (res.code !== 200) {
+      responseText = "Language not supported with Yandex";
+    }
+    else {
+      responseText = res.text[0];
+    }
 
     response.writeHead(200, {'Content-Type': 'application/json'});
-    response.write(JSON.stringify({text: res.text[0]}));
+    response.write(JSON.stringify({text: responseText}));
     response.end();
   })
   .catch((err) => { console.log(err) });
