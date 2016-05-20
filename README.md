@@ -28,7 +28,7 @@ We were able to find two translate APIs with easy and quick to use response data
 * bluebird
 * body-parser
 * compression
-* diff-mation-patch
+* diff-match-patch
 * express
 * nodemon
 * superagent
